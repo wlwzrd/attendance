@@ -1,5 +1,6 @@
 from django.contrib import admin
 from attendance.models import *
+from django.contrib.auth.models import User
 # Register your models here.
 
 class CourseSectionAdmin(admin.ModelAdmin):
@@ -26,13 +27,14 @@ class StudentAdmin(admin.ModelAdmin):
             return db_field.formfield(**kwargs)
         return super(StudentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         """
         If the user is a superuser, then display all students. Otherwise only show their own enrolled students.
         """
+        qs = super(StudentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
-            return Student.objects.all()
-        return Student.objects.filter(owner=request.user)
+            return qs
+        return qs.filter(owner=request.user)
 
 admin.site.register(Period)
 admin.site.register(Student, StudentAdmin)

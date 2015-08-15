@@ -46,10 +46,10 @@ class CourseSection(models.Model):
     enrollments = models.ManyToManyField('Student')
     class Meta:
         #unique_together=(("course","period"),)
-        verbose_name = 'Course'
-        verbose_name_plural = 'Courses'
+        verbose_name = 'Course Section'
+        verbose_name_plural = 'Course Sections'
     def __unicode__(self):
-        return u'Course: %s |Teacher %s %s'%(self.course.short_name, self.teacher.firs_name, self.teacher.last_name)
+        return u'Course: %s |Teacher %s %s'%(self.course.short_name, self.teacher.first_name, self.teacher.last_name)
 
 class AttendanceStatus(models.Model):
     name = models.CharField(max_length=20, null=False)

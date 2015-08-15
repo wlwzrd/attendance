@@ -5,7 +5,9 @@ from attendance.models import *
 class CourseSectionAdmin(admin.ModelAdmin):
     pass
 
-class FilterStudentAdmin(admin.ModelAdmin):
+class StudentAdmin(admin.ModelAdmin):
+    fields = ('code', 'first_name', 'middle_name', 'last_name', 'sex', 'email',)
+    list_display = ('code', 'first_name', 'last_name')
     def save_model(self, request, instance, form, change):
         user = request.user
         instance = form.save(commit=False)
@@ -25,14 +27,12 @@ class FilterStudentAdmin(admin.ModelAdmin):
         return super(StudentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def queryset(self, request):
-        #qs = super(StudentAdmin, self).queryset(request)
+        """
+        If the user is a superuser, then display all students. Otherwise only show their own enrolled students.
+        """
         if request.user.is_superuser:
             return Student.objects.all()
         return Student.objects.filter(owner=request.user)
-    
-class StudentAdmin(FilterStudentAdmin):
-    fields = ('code', 'first_name', 'middle_name', 'last_name', 'sex', 'email',)
-    list_display = ('code', 'first_name', 'last_name')
 
 admin.site.register(Period)
 admin.site.register(Student, StudentAdmin)

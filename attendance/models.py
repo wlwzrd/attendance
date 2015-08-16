@@ -45,7 +45,7 @@ class CourseSection(models.Model):
     teacher = models.ForeignKey(User, null=False)
     enrollments = models.ManyToManyField('Student')
     class Meta:
-        #unique_together=(("course","period"),)
+        #unique_together=(("course", "period", "teacher"),)
         verbose_name = 'Course Section'
         verbose_name_plural = 'Course Sections'
     def __unicode__(self):

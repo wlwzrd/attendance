@@ -28,13 +28,33 @@ class StudentAdmin(admin.ModelAdmin):
         return super(StudentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request):
-        """
-        If the user is a superuser, then display all students. Otherwise only show their own enrolled students.
+        """If the user is a superuser, then display all students. 
+        Otherwise only show their own enrolled students.
         """
         qs = super(StudentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.filter(owner=request.user)
+
+class CourseSectionAdmin(admin.ModelAdmin):
+    fields = ("course","is_active", "period", "enrollments",)
+    def save_model(self, request, instance, form, change):
+        user = request.user
+        instance = form.save(commit=False)
+        if not change or not instance.owner:
+            instance.teacher = user
+        instance.save()
+        form.save_m2m()
+        return instance
+
+    def get_queryser(self, request):
+        """If the user is a superuser, then display all course sections.
+        Otherwise only show their own coursesection.
+        """
+        qs = super(CourseSectionAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(teacher=request.user)
 
 admin.site.register(Period)
 admin.site.register(Student, StudentAdmin)

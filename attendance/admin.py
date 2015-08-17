@@ -3,9 +3,6 @@ from attendance.models import *
 from django.contrib.auth.models import User
 # Register your models here.
 
-class CourseSectionAdmin(admin.ModelAdmin):
-    pass
-
 class StudentAdmin(admin.ModelAdmin):
     fields = ('code', 'first_name', 'middle_name', 'last_name', 'sex', 'email',)
     list_display = ('code', 'first_name', 'last_name')
@@ -47,7 +44,7 @@ class CourseSectionAdmin(admin.ModelAdmin):
         form.save_m2m()
         return instance
 
-    def get_queryser(self, request):
+    def get_queryset(self, request):
         """If the user is a superuser, then display all course sections.
         Otherwise only show their own coursesection.
         """
@@ -62,3 +59,4 @@ admin.site.register(Course)
 admin.site.register(AttendanceStatus)
 admin.site.register(CourseSection,CourseSectionAdmin)
 admin.site.register(StudentAttendance)
+

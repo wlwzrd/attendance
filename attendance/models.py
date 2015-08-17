@@ -30,7 +30,7 @@ class Student(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=255, null=False, unique=True)
-    short_name = models.CharField(max_length=10, help_text="Could be a course code", null=False)
+    short_name = models.CharField(max_length=10, help_text="Could be a course code", null=False, unique=True)
     description = models.TextField(max_length=600)
     class Meta:
         verbose_name = 'Course'
@@ -45,7 +45,7 @@ class CourseSection(models.Model):
     teacher = models.ForeignKey(User, null=False)
     enrollments = models.ManyToManyField('Student')
     class Meta:
-        #unique_together=(("course", "period", "teacher"),)
+        unique_together=(("course", "period", "teacher"),)
         verbose_name = 'Course Section'
         verbose_name_plural = 'Course Sections'
     def __unicode__(self):

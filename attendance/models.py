@@ -66,8 +66,7 @@ class StudentAttendance(models.Model):
     status = models.ForeignKey(AttendanceStatus)
     notes = models.CharField(max_length=250, blank=True)
     class Meta:
-        unique_together = (("student", "date", "status"),)
+        unique_together = (("student", "date"),)
         ordering = ('-date', 'student',)
     def __unicode__(self):
         return unicode(self.student) + " " + unicode(self.date) + " " + unicode(self.status)
-    

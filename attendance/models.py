@@ -4,6 +4,8 @@ import datetime
 
 # Create your models here.
 class Period(models.Model):
+    """ Defines the useed surind academic year
+    """
     name=models.CharField(max_length=6,help_text="Example 2015-1 or 2015-2")
     class Meta:
         verbose_name = 'Period'
@@ -12,6 +14,10 @@ class Period(models.Model):
         return self.name
 
 class Student(models.Model):
+    """ Represent a student that is enrolled in at least one course with 
+    one teacher. Each student is used only for one teacher becasue the 
+    attendance will be used for private teachers.
+    """
     code = models.IntegerField()
     first_name = models.CharField(max_length=150, blank=False, null=False, verbose_name="First Name")
     middle_name = models.CharField(max_length=150, blank=True, null=True, verbose_name="Middle Name")
@@ -29,6 +35,8 @@ class Student(models.Model):
             return u"{0}, {1}".format(self.last_name, self.first_name)
 
 class Course(models.Model):
+    """ Represent a normal course on the university/school catalogue 
+    """
     name = models.CharField(max_length=255, null=False, unique=True)
     short_name = models.CharField(max_length=10, help_text="Could be a course code", null=False, unique=True)
     description = models.TextField(max_length=600)
@@ -39,6 +47,8 @@ class Course(models.Model):
         return u'Course: %s |Code %s'%(self.name,self.short_name)
 
 class CourseSection(models.Model):
+    """ Represent a section of a course. Each time there is at least one section in the year.
+    """
     course = models.ForeignKey(Course)
     is_active = models.BooleanField(default=True)
     period = models.ForeignKey(Period, null=False)
@@ -52,6 +62,8 @@ class CourseSection(models.Model):
         return u'Course: %s |Teacher %s %s'%(self.course.short_name, self.teacher.first_name, self.teacher.last_name)
 
 class AttendanceStatus(models.Model):
+    """ Define the commond status for the attendance
+    """
     name = models.CharField(max_length=20, null=False)
     code = models.CharField(max_length=5, null=False)
     description = models.TextField(max_length=250, null=False, help_text="Explanation of the status")
@@ -59,6 +71,8 @@ class AttendanceStatus(models.Model):
         return self.name
 
 class StudentAttendance(models.Model):
+    """ Define each call to the attendance for each student in each course.
+    """
     student = models.ForeignKey(Student)
     course_section = models.ForeignKey(CourseSection)
     period = models.ForeignKey(Period)

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from attendance.signals import send_attendance
 import datetime
 
 # Create your models here.
@@ -84,3 +86,5 @@ class StudentAttendance(models.Model):
         ordering = ('-date', 'student',)
     def __unicode__(self):
         return unicode(self.student) + " " + unicode(self.date) + " " + unicode(self.status)
+
+post_save.connect(send_record,sender=StudentAttendance)

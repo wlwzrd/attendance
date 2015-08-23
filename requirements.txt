@@ -1,5 +1,9 @@
 Django==1.8.3
+Padding==0.4
 argparse==1.2.1
 honcho==0.6.6
+keen==0.3.17
 psycopg2==2.6.1
+pycrypto==2.6.1
+requests==2.7.0
 wsgiref==0.1.2
